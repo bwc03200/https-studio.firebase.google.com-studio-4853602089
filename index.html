@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EHPAD-Staff | Création du profil établissement</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+
+<div class="landing-bg">
+  <!-- Hero -->
+  <div class="landing-hero animate-fadeIn">
+    <div class="fph-badge">
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+      FPH — Fonction Publique Hospitalière
+    </div>
+    <div class="landing-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <h1>EHPAD-Staff</h1>
+    <p class="subtitle">Gestion intuitive des remplacements pour votre EHPAD</p>
+  </div>
+
+  <!-- Card principale -->
+  <div class="landing-card animate-slideUp" id="main-card">
+
+    <!-- Étape 1 : Vérification / Accueil -->
+    <div id="step-welcome" class="step-content">
+      <div class="landing-card-header">
+        <h2>Bienvenue</h2>
+        <p>Configurez votre établissement pour commencer à gérer vos remplacements efficacement.</p>
+      </div>
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <button class="btn btn-primary btn-xl btn-block" onclick="goStep('step-etablissement')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          Créer le profil de l'établissement
+        </button>
+        <button class="btn btn-outline btn-xl btn-block" onclick="checkAndLogin()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Accéder à la connexion
+        </button>
+      </div>
+
+      <div id="no-etablissement-alert" class="alert alert-warning hidden mt-4" style="margin-top:1rem;">
+        <span class="alert-icon">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        </span>
+        <span>Aucun profil établissement trouvé. Veuillez d'abord créer votre profil.</span>
+      </div>
+    </div>
+
+    <!-- Étape 2 : Infos établissement -->
+    <div id="step-etablissement" class="step-content hidden">
+      <div class="landing-card-header">
+        <h2>Votre établissement</h2>
+        <p>Renseignez les informations de votre EHPAD.</p>
+      </div>
+      <div class="step-indicator">
+        <div class="step-dot done" id="dot-1b"></div>
+        <div class="step-dot active" id="dot-2b"></div>
+        <div class="step-dot" id="dot-3b"></div>
+      </div>
+
+      <form id="form-etablissement" novalidate>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label">Nom de l'établissement *</label>
+            <input type="text" id="etab-name" class="form-input" placeholder="Ex: EHPAD Les Acacias" required/>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Adresse *</label>
+              <input type="text" id="etab-address" class="form-input" placeholder="12 rue des Fleurs" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ville *</label>
+              <input type="text" id="etab-city" class="form-input" placeholder="Lyon" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Code postal *</label>
+              <input type="text" id="etab-postal" class="form-input" placeholder="69000" maxlength="5" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Téléphone</label>
+              <input type="tel" id="etab-phone" class="form-input" placeholder="04 72 00 00 00"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom du directeur / de la directrice *</label>
+            <input type="text" id="etab-director" class="form-input" placeholder="Dr. Élise FONTAINE" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Numéro FINESS</label>
+            <input type="text" id="etab-finess" class="form-input" placeholder="690012345"/>
+          </div>
+
+          <div id="etab-error" class="alert alert-danger hidden"></div>
+
+          <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+            <button type="button" class="btn btn-outline" onclick="goStep('step-welcome')">← Retour</button>
+            <button type="submit" class="btn btn-primary" style="flex:1">
+              Continuer →
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Étape 3 : Compte administrateur initial -->
+    <div id="step-admin" class="step-content hidden">
+      <div class="landing-card-header">
+        <h2>Compte administrateur</h2>
+        <p>Créez le premier compte administrateur de garde.</p>
+      </div>
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+      </div>
+
+      <div class="alert alert-info" style="margin-bottom:1rem;">
+        <span class="alert-icon">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+        </span>
+        <span>Ce compte sera celui du responsable principal. Des comptes supplémentaires pourront être créés depuis le tableau de bord.</span>
+      </div>
+
+      <form id="form-admin" novalidate>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Prénom *</label>
+              <input type="text" id="admin-firstname" class="form-input" placeholder="Jean" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom *</label>
+              <input type="text" id="admin-lastname" class="form-input" placeholder="MARTIN" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mot de passe *</label>
+            <div class="password-wrapper">
+              <input type="password" id="admin-pwd" class="form-input" placeholder="Min. 6 caractères" required/>
+              <button type="button" class="password-toggle" id="toggle-admin-pwd" title="Afficher/masquer">
+                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirmer le mot de passe *</label>
+            <div class="password-wrapper">
+              <input type="password" id="admin-pwd2" class="form-input" placeholder="Répéter le mot de passe" required/>
+              <button type="button" class="password-toggle" id="toggle-admin-pwd2" title="Afficher/masquer">
+                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="admin-error" class="alert alert-danger hidden"></div>
+
+          <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+            <button type="button" class="btn btn-outline" onclick="goStep('step-etablissement')">← Retour</button>
+            <button type="submit" class="btn btn-admin" style="flex:1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Créer & Accéder
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div><!-- /landing-card -->
+
+  <div class="landing-footer-link">
+    Vous avez déjà un compte ? <a href="login.html">Se connecter</a>
+  </div>
+
+</div><!-- /landing-bg -->
+
+<script src="js/app.js"></script>
+<script>
+  // ---- Step navigation ----
+  function goStep(stepId) {
+    document.querySelectorAll('.step-content').forEach(s => s.classList.add('hidden'));
+    const el = document.getElementById(stepId);
+    if (el) el.classList.remove('hidden');
+  }
+
+  function checkAndLogin() {
+    if (hasEtablissement()) {
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('no-etablissement-alert').classList.remove('hidden');
+    }
+  }
+
+  // ---- On load: check if profile exists ----
+  document.addEventListener('DOMContentLoaded', () => {
+    initPasswordToggle('admin-pwd',  'toggle-admin-pwd');
+    initPasswordToggle('admin-pwd2', 'toggle-admin-pwd2');
+
+    if (hasEtablissement()) {
+      // Pre-fill the step 2 form if exists
+      const etab = getEtablissement();
+      if (etab) {
+        document.getElementById('etab-name').value      = etab.name || '';
+        document.getElementById('etab-address').value   = etab.address || '';
+        document.getElementById('etab-city').value      = etab.city || '';
+        document.getElementById('etab-postal').value    = etab.postalCode || '';
+        document.getElementById('etab-phone').value     = etab.phone || '';
+        document.getElementById('etab-director').value  = etab.director || '';
+        document.getElementById('etab-finess').value    = etab.finess || '';
+      }
+    }
+  });
+
+  // ---- Form étab ----
+  document.getElementById('form-etablissement').addEventListener('submit', e => {
+    e.preventDefault();
+    const name     = document.getElementById('etab-name').value.trim();
+    const address  = document.getElementById('etab-address').value.trim();
+    const city     = document.getElementById('etab-city').value.trim();
+    const postal   = document.getElementById('etab-postal').value.trim();
+    const phone    = document.getElementById('etab-phone').value.trim();
+    const director = document.getElementById('etab-director').value.trim();
+    const finess   = document.getElementById('etab-finess').value.trim();
+    const errEl    = document.getElementById('etab-error');
+
+    if (!name || !address || !city || !postal || !director) {
+      errEl.textContent = 'Veuillez remplir tous les champs obligatoires (*).';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    errEl.classList.add('hidden');
+    saveEtablissement({ name, address, city, postalCode: postal, phone, director, finess });
+    goStep('step-admin');
+  });
+
+  // ---- Form admin ----
+  document.getElementById('form-admin').addEventListener('submit', e => {
+    e.preventDefault();
+    const fn   = document.getElementById('admin-firstname').value.trim();
+    const ln   = document.getElementById('admin-lastname').value.trim();
+    const pwd  = document.getElementById('admin-pwd').value;
+    const pwd2 = document.getElementById('admin-pwd2').value;
+    const errEl = document.getElementById('admin-error');
+
+    if (!fn || !ln || !pwd) {
+      errEl.textContent = 'Veuillez remplir tous les champs obligatoires.';
+      errEl.classList.remove('hidden'); return;
+    }
+    if (pwd.length < 6) {
+      errEl.textContent = 'Le mot de passe doit contenir au moins 6 caractères.';
+      errEl.classList.remove('hidden'); return;
+    }
+    if (pwd !== pwd2) {
+      errEl.textContent = 'Les mots de passe ne correspondent pas.';
+      errEl.classList.remove('hidden'); return;
+    }
+    errEl.classList.add('hidden');
+
+    // Create admin account (skip if same user exists)
+    const existing = getUsers().find(u =>
+      u.firstName.toLowerCase() === fn.toLowerCase() &&
+      u.lastName.toLowerCase() === ln.toLowerCase() &&
+      u.role === 'admin'
+    );
+    if (!existing) {
+      const users = getUsers();
+      users.push({
+        id: genId(),
+        firstName: fn,
+        lastName: ln.toUpperCase(),
+        role: 'admin',
+        password: btoa(pwd),
+        createdAt: new Date().toISOString()
+      });
+      store('users', users);
+    }
+
+    showToast('Profil créé avec succès ! Redirection...', 'success');
+    setTimeout(() => window.location.href = 'login.html', 1500);
+  });
+</script>
+</body>
+</html>

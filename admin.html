@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EHPAD-Staff | Tableau de bord Administrateur</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body class="dashboard-layout">
+
+<!-- ======================== SIDEBAR ======================== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-logo sidebar-brand-logo-admin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </div>
+    <div class="sidebar-brand-text">
+      <h3>EHPAD-Staff</h3>
+      <p id="sidebar-etab-name">—</p>
+    </div>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="sidebar-avatar" id="sidebar-avatar">JM</div>
+    <div class="sidebar-user-info">
+      <h4 id="sidebar-user-name">—</h4>
+      <p>Administrateur de garde</p>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-section">Navigation</div>
+    <button class="nav-item active-admin" data-section="dashboard" onclick="showSection('dashboard', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Tableau de bord
+    </button>
+    <button class="nav-item" data-section="replacements" onclick="showSection('replacements', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      Remplacements
+    </button>
+    <button class="nav-item" data-section="agents" onclick="showSection('agents', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Agents
+    </button>
+    <button class="nav-item" data-section="applications" onclick="showSection('applications', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
+      Candidatures
+    </button>
+
+    <div class="sidebar-nav-section" style="margin-top:.5rem;">Gestion</div>
+    <button class="nav-item" data-section="profile" onclick="showSection('profile', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Mon profil
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="nav-item nav-item-logout" onclick="logout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Déconnexion
+    </button>
+  </div>
+</aside>
+
+<!-- ======================== MAIN ======================== -->
+<div class="main-content">
+  <header class="topbar">
+    <div class="topbar-left">
+      <h2 id="topbar-title">Tableau de bord</h2>
+      <p id="topbar-subtitle">Vue d'ensemble des remplacements</p>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-date">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+        <span id="current-date-display"></span>
+      </div>
+      <button class="btn btn-admin btn-sm" onclick="openModal('modal-new-replacement')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouveau remplacement
+      </button>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- ===== SECTION DASHBOARD ===== -->
+    <section id="section-dashboard" class="section active">
+      <div class="grid-4 mb-6" id="stats-grid">
+        <!-- Injecté par JS -->
+      </div>
+
+      <div class="grid-2" style="gap:1.5rem;">
+        <!-- Remplacements urgents -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Remplacements ouverts</h3>
+            <button class="btn btn-admin btn-sm" onclick="showSection('replacements', document.querySelector('[data-section=replacements]'))">Voir tout</button>
+          </div>
+          <div id="dash-replacements-list">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <h3>Aucun remplacement ouvert</h3>
+              <p>Créez un besoin de remplacement pour commencer.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Candidatures en attente -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Candidatures en attente</h3>
+            <button class="btn btn-outline btn-sm" onclick="showSection('applications', document.querySelector('[data-section=applications]'))">Voir tout</button>
+          </div>
+          <div id="dash-applications-list">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+              <h3>Aucune candidature en attente</h3>
+              <p>Les candidatures des agents apparaîtront ici.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION REMPLACEMENTS ===== -->
+    <section id="section-replacements" class="section">
+      <div class="flex justify-between items-center mb-4" style="flex-wrap:wrap;gap:.75rem;">
+        <div>
+          <h2 style="margin:0;">Gestion des remplacements</h2>
+          <p style="margin:0;font-size:.875rem;">Créez et suivez tous les besoins de remplacement</p>
+        </div>
+        <button class="btn btn-admin" onclick="openModal('modal-new-replacement')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouveau remplacement
+        </button>
+      </div>
+
+      <!-- Filtres -->
+      <div class="filter-bar">
+        <select class="form-select" id="filter-rep-status" onchange="renderReplacementsTable()">
+          <option value="">Tous les statuts</option>
+          <option value="open">Ouvert</option>
+          <option value="pending">En attente</option>
+          <option value="assigned">Pourvu</option>
+          <option value="cancelled">Annulé</option>
+        </select>
+        <select class="form-select" id="filter-rep-site" onchange="renderReplacementsTable()">
+          <option value="">Tous les sites</option>
+        </select>
+        <select class="form-select" id="filter-rep-profile" onchange="renderReplacementsTable()">
+          <option value="">Tous les profils</option>
+        </select>
+        <input type="date" class="form-input" id="filter-rep-date" onchange="renderReplacementsTable()" placeholder="Filtrer par date" style="max-width:180px;"/>
+        <button class="btn btn-ghost btn-sm" onclick="clearRepFilters()">Effacer filtres</button>
+      </div>
+
+      <div class="table-wrapper" id="replacements-table-wrapper">
+        <!-- Injecté par JS -->
+      </div>
+    </section>
+
+    <!-- ===== SECTION AGENTS ===== -->
+    <section id="section-agents" class="section">
+      <div class="flex justify-between items-center mb-4" style="flex-wrap:wrap;gap:.75rem;">
+        <div>
+          <h2 style="margin:0;">Gestion des agents</h2>
+          <p style="margin:0;font-size:.875rem;">Annuaire du personnel disponible pour les remplacements</p>
+        </div>
+        <button class="btn btn-admin" onclick="openModal('modal-new-agent')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter un agent
+        </button>
+      </div>
+
+      <!-- Filtres agents -->
+      <div class="filter-bar">
+        <div class="input-icon-wrapper" style="flex:2;">
+          <span class="input-icon-left"><svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg></span>
+          <input type="text" class="form-input" id="filter-agent-name" placeholder="Rechercher par nom..." oninput="renderAgentsList()"/>
+        </div>
+        <select class="form-select" id="filter-agent-profile" onchange="renderAgentsList()">
+          <option value="">Tous les profils</option>
+        </select>
+        <select class="form-select" id="filter-agent-site" onchange="renderAgentsList()">
+          <option value="">Tous les sites</option>
+        </select>
+        <select class="form-select" id="filter-agent-avail" onchange="renderAgentsList()">
+          <option value="">Disponibilité</option>
+          <option value="true">Disponible</option>
+          <option value="false">Indisponible</option>
+        </select>
+      </div>
+
+      <div id="agents-list-container"><!-- Injecté --></div>
+    </section>
+
+    <!-- ===== SECTION CANDIDATURES ===== -->
+    <section id="section-applications" class="section">
+      <div class="mb-4">
+        <h2 style="margin:0;">Candidatures reçues</h2>
+        <p style="margin:0;font-size:.875rem;">Gérez les réponses des agents aux besoins de remplacement</p>
+      </div>
+
+      <div class="filter-bar">
+        <select class="form-select" id="filter-app-status" onchange="renderApplicationsTable()">
+          <option value="">Tous les statuts</option>
+          <option value="pending">En attente</option>
+          <option value="accepted">Acceptée</option>
+          <option value="rejected">Refusée</option>
+        </select>
+        <select class="form-select" id="filter-app-site" onchange="renderApplicationsTable()">
+          <option value="">Tous les sites</option>
+        </select>
+      </div>
+
+      <div class="table-wrapper" id="applications-table-wrapper"><!-- Injecté --></div>
+    </section>
+
+    <!-- ===== SECTION PROFIL ===== -->
+    <section id="section-profile" class="section">
+      <div id="admin-profile-content"><!-- Injecté --></div>
+    </section>
+
+  </div><!-- /page-content -->
+</div><!-- /main-content -->
+
+<!-- ======================== MODALS ======================== -->
+
+<!-- Modal : Nouveau remplacement -->
+<div class="modal-overlay" id="modal-new-replacement">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div>
+        <h3 style="margin:0;">Créer un besoin de remplacement</h3>
+        <p style="margin:0;font-size:.8rem;color:var(--text-light);">Renseignez les informations du poste à pourvoir</p>
+      </div>
+      <button class="modal-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="form-new-replacement" novalidate>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Site / Unité *</label>
+              <select id="rep-site" class="form-select" required>
+                <option value="">— Sélectionner le site —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Profil recherché *</label>
+              <select id="rep-profile" class="form-select" required>
+                <option value="">— Sélectionner le profil —</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Début du remplacement *</label>
+              <div class="datetime-wrapper">
+                <input type="datetime-local" id="rep-start" class="form-input" required/>
+                <span class="datetime-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fin du remplacement *</label>
+              <div class="datetime-wrapper">
+                <input type="datetime-local" id="rep-end" class="form-input" required/>
+                <span class="datetime-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview durée -->
+          <div id="duration-preview" class="hidden" style="background:var(--admin-light);border:1px solid var(--admin-mid);border-radius:var(--radius);padding:.75rem 1rem;font-size:.875rem;color:var(--admin-dark);display:flex;align-items:center;gap:.5rem;">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+            <span id="duration-text"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Notes / Contexte</label>
+            <textarea id="rep-notes" class="form-textarea" placeholder="Ex: Remplacement congé maladie, poste du matin..."></textarea>
+          </div>
+
+          <div id="new-rep-error" class="alert alert-danger hidden"></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-new-replacement')">Annuler</button>
+      <button class="btn btn-admin" onclick="submitNewReplacement()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Publier le remplacement
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal : Détail remplacement -->
+<div class="modal-overlay" id="modal-rep-detail">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 style="margin:0;" id="rep-detail-title">Détail du remplacement</h3>
+      <button class="modal-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="rep-detail-body"><!-- Injecté --></div>
+    <div class="modal-footer" id="rep-detail-footer"></div>
+  </div>
+</div>
+
+<!-- Modal : Ajouter un agent -->
+<div class="modal-overlay" id="modal-new-agent">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div>
+        <h3 style="margin:0;">Ajouter un agent</h3>
+        <p style="margin:0;font-size:.8rem;color:var(--text-light);">Créez un compte pour un membre du personnel</p>
+      </div>
+      <button class="modal-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="form-new-agent" novalidate>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Prénom *</label>
+              <input type="text" id="na-firstname" class="form-input" placeholder="Marie" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom *</label>
+              <input type="text" id="na-lastname" class="form-input" placeholder="DUPONT" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Profil / Qualification *</label>
+              <select id="na-profile" class="form-select" required>
+                <option value="">— Sélectionner —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Téléphone</label>
+              <input type="tel" id="na-phone" class="form-input" placeholder="06 12 34 56 78"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sites habituels</label>
+            <div class="site-grid" id="na-sites-grid"><!-- Injecté --></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mot de passe *</label>
+            <div class="password-wrapper">
+              <input type="password" id="na-pwd" class="form-input" placeholder="Min. 6 caractères" required/>
+              <button type="button" class="password-toggle" id="toggle-na-pwd">
+                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="new-agent-error" class="alert alert-danger hidden"></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-new-agent')">Annuler</button>
+      <button class="btn btn-admin" onclick="submitNewAgent()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Créer le compte agent
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal : Détail Agent -->
+<div class="modal-overlay" id="modal-agent-detail">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 style="margin:0;">Fiche agent</h3>
+      <button class="modal-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="agent-detail-body"><!-- Injecté --></div>
+    <div class="modal-footer" id="agent-detail-footer"></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
