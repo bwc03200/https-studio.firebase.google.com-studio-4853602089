@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'My App',
-        short_name: 'MyApp',
-        description: 'A Progressive Web App built with React and Vite',
+        name: 'Firebase Studio App',
+        short_name: 'Firebase',
+        description: 'Firebase Studio App — Progressive Web App',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
